@@ -1,13 +1,23 @@
-import { useState } from "react"
+import { useState, useContext, useEffect } from "react"
 import Card from "./shared/Card"
 import Button from "./shared/Button"
 import SelectRating from "./SelectRating"
+import FeedbackContext from "../context/FeedbackContext"
 
-function FeedbackForm({ handleAdd }) {
+function FeedbackForm() {
   const [text, setText] = useState("")
   const [rating, setRating] = useState(10)
   const [btnDisabled, setBtnDisabled] = useState(true)
   const [message, setMessage] = useState("")
+
+  // Get state objs
+  const {
+    addFeedbackItem,
+    feedbackEdit,
+    updateFeedbackItem,
+    setReset,
+    setFeedbackEdit,
+  } = useContext(FeedbackContext)
 
   // Handles realtime validation
   const handleTextChange = (e) => {
@@ -24,6 +34,16 @@ function FeedbackForm({ handleAdd }) {
     setText(e.target.value)
   }
 
+  //update reviews
+  useEffect(() => {
+    if (feedbackEdit.edit === true) {
+      setBtnDisabled(false)
+      setText(feedbackEdit.item.text)
+      setRating(feedbackEdit.item.rating)
+    }
+  }, [feedbackEdit])
+
+  // Submit the feedback, new and updated.
   const handleSubmit = (e) => {
     e.preventDefault()
     if (text.trim().length >= 10) {
@@ -31,8 +51,17 @@ function FeedbackForm({ handleAdd }) {
         text,
         rating,
       }
-      handleAdd(newFeedback)
+
+      if (feedbackEdit.edit === true) {
+        updateFeedbackItem(feedbackEdit.item.id, newFeedback)
+      } else {
+        addFeedbackItem(newFeedback)
+      }
       setText("")
+      setBtnDisabled(true)
+      setRating(10)
+      setReset(true)
+      setFeedbackEdit({}, false)
     }
   }
 
