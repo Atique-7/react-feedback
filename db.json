@@ -1,0 +1,19 @@
+{
+  "feedback": [
+    {
+      "text": "It was a wonderful experience.NOT",
+      "rating": 4,
+      "id": 1
+    },
+    {
+      "id": 2,
+      "rating": 8,
+      "text": "It was alright."
+    },
+    {
+      "id": 3,
+      "rating": 7.9,
+      "text": "Security was awful."
+    }
+  ]
+}
